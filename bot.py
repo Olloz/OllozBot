@@ -297,7 +297,7 @@ async def swstats(ctx, username):
 
 @client.command()
 async def stats(ctx, username):
-    url = f'https://api.hypixel.net/player?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&name={username}'
+    url = f'https://api.hypixel.net/player?key=API&name={username}'
 
     if True and len(username) >= 16:
         await ctx.send("Please enter a valid username.")
@@ -320,7 +320,7 @@ async def stats(ctx, username):
                             totalquests += len(completion)
 
             uuid = data['player']['uuid']
-            data2 = f'https://api.hypixel.net/friends?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&uuid={uuid}'
+            data2 = f'https://api.hypixel.net/friends?key=API&uuid={uuid}'
             totalFriends = 0
             async with aiohttp.request("GET", data2) as response2:
                 if response2.status == 200:
@@ -347,4 +347,4 @@ async def stats(ctx, username):
 
 
 
-client.run('NzQ1NjExNTE5NzcyOTgzMzQ4.Xz0S1w.49nkoOSNG1Xk50_PzoL95rblY-E')
+client.run('CLIENTID')
