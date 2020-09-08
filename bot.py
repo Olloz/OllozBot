@@ -1,10 +1,15 @@
-import random
-import discord
-from discord.ext import commands
-import aiohttp
-from aiohttp import request
-from discord.ext.commands import Bot
+import json
 import math
+import random
+import aiohttp
+import discord
+from aiohttp import request
+from discord.ext import commands
+from discord.ext.commands import Bot
+
+json_data = open('private.json')
+data = json.load(json_data)
+
 client: Bot = commands.Bot(command_prefix='qt ')
 client.remove_command('help')
 owner = ["319718067066109967"]
@@ -224,18 +229,26 @@ async def cat_fact(ctx):
 
 @client.command()
 async def karma(ctx, username):
-    url = f'https://api.hypixel.net/player?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&name={username}'
+
+    json_data = open('private.json')
+    hypixeldata = json.load(json_data)
+
+    url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
 
     async with aiohttp.request("GET", url) as response:
         if response.status == 200:
             data = await response.json()
             karma = data["player"]["karma"]
             await ctx.send(f'{karma:,}')
-
+            json_data.close()
 
 @client.command()
 async def bwstats(ctx, username):
-    url = f'https://api.hypixel.net/player?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&name={username}'
+
+    json_data = open('private.json')
+    hypixeldata = json.load(json_data)
+
+    url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
 
     if True and len(username) >= 16:
         await ctx.send("Please enter a valid username.")
@@ -263,11 +276,15 @@ async def bwstats(ctx, username):
                               inline=False)
 
             await ctx.send(embed=bwembed)
-
+            json_data.close()
 
 @client.command()
 async def swstats(ctx, username):
-    url = f'https://api.hypixel.net/player?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&name={username}'
+
+    json_data = open('private.json')
+    hypixeldata = json.load(json_data)
+
+    url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
 
     if True and len(username) >= 16:
         await ctx.send("Please enter a valid username.")
@@ -293,11 +310,15 @@ async def swstats(ctx, username):
                               inline=False)
 
             await ctx.send(embed=swembed)
-
+            json_data.close()
 
 @client.command()
 async def stats(ctx, username):
-    url = f'https://api.hypixel.net/player?key=API&name={username}'
+
+    json_data = open('private.json')
+    hypixeldata = json.load(json_data)
+
+    url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
 
     if True and len(username) >= 16:
         await ctx.send("Please enter a valid username.")
@@ -320,7 +341,7 @@ async def stats(ctx, username):
                             totalquests += len(completion)
 
             uuid = data['player']['uuid']
-            data2 = f'https://api.hypixel.net/friends?key=API&uuid={uuid}'
+            data2 = f'https://api.hypixel.net/friends?key={hypixeldata["hypixelKey"]}&uuid={uuid}'
             totalFriends = 0
             async with aiohttp.request("GET", data2) as response2:
                 if response2.status == 200:
@@ -329,7 +350,7 @@ async def stats(ctx, username):
                     totalFriends = len(friends)
 
             sembed = discord.Embed(title='Hypixel Stats', color=0x00fffb)
-
+            sembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
             sembed.add_field(name=f'{username}\'s Stats:',
                             value=(f'\n**Level**: {networklevel}'
                                    f'\n**Karma**: {karma:,}'
@@ -341,10 +362,11 @@ async def stats(ctx, username):
                               inline=True))
 
             await ctx.send(embed=sembed)
+            json_data.close()
 
 
 
 
 
-
-client.run('CLIENTID')
+client.run(data["discordKey"])
+json_data.close()
