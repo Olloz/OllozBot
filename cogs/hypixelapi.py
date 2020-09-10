@@ -183,6 +183,50 @@ class hypixelapi(commands.Cog):
                 json_data.close()
                 return
 
+    @commands.command()
+    async def duelstats(self, ctx, username):
+
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
+        url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
+
+        async with aiohttp.request("GET", url) as response:
+            if response.status == 200:
+
+                data = await response.json()
+                wins = data['player']['stats']['Duels']['wins']
+                losses = data['player']['stats']['Duels']['losses']
+                kills = data['player']['stats']['Duels']['kills']
+
+                dembed = discord.Embed(title='Duels Stats', color=0x00fffb)
+                dembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
+                dembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
+                dembed.set_footer(text='Bot by: Olloz#0001')
+                dembed.add_field(name=f'{username}\'s Duels Stats:',
+                                  value=(f'\n**Wins**: {wins}'
+                                         f'\n**Losses**: {losses}'
+                                         f'\n**Kills**: {kills}'),
+                                  inline=False)
+
+                await ctx.send(embed=dembed)
+                json_data.close()
+                return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def setup(bot):
     bot.add_cog(hypixelapi(bot))
