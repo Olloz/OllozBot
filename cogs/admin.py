@@ -6,6 +6,7 @@ class admin(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.has_permissions(manage_channels=True)
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount)
 
