@@ -86,6 +86,10 @@ async def clear_error(ctx, error):
 async def panda(ctx):
     await ctx.send('**PANDA QT**')
 
+@client.command()
+async def xynit(ctx):
+    await ctx.send('**XYNIT**')
+
 
 @client.command()
 async def gummy(ctx):
@@ -167,6 +171,8 @@ async def help(ctx):
     helpembed.add_field(name="Hypixel Karma", value="qt karma <IGN>", inline=True)
     helpembed.add_field(name="Skywars Stats", value="qt swstats <IGN>", inline=True)
     helpembed.add_field(name="Bedwars Stats", value="qt bwstats <IGN>", inline=True)
+    helpembed.add_field(name="Hypixel Stats", value="qt stats <IGN>", inline=True)
+    helpembed.add_field(name="Skin", value="qt skin <IGN>", inline=True)
     helpembed.set_footer(text='Message Olloz for more help!')
 
     await ctx.send(embed=helpembed)
@@ -225,7 +231,7 @@ async def cat_fact(ctx):
             await ctx.send(data['fact'])
 
 
-# HYPIXEL API#
+#HYPIXEL API#
 
 @client.command()
 async def karma(ctx, username):
@@ -266,6 +272,8 @@ async def bwstats(ctx, username):
 
             bwembed = discord.Embed(title='Bedwars Stats', color=0x00fffb)
             bwembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
+            bwembed.set_footer(icon_url = 'https://i.imgur.com/TLnWvw2.png')
+            bwembed.set_footer(text = 'Bot by: Olloz#0001')
             bwembed.add_field(name=f'{username}\'s Bedwars Stats:',
                             value=(f'\n**Star**: {star}'
                                    f'\n**Wins**: {wins}'
@@ -301,6 +309,8 @@ async def swstats(ctx, username):
 
             swembed = discord.Embed(title='Skywars Stats', color=0x00fffb)
             swembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
+            swembed.set_footer(icon_url = 'https://i.imgur.com/TLnWvw2.png')
+            swembed.set_footer(text = 'Bot by: Olloz#0001')
             swembed.add_field(name=f'{username}\'s Skywars Stats:',
                             value=(f'\n**Star**: {swstar}'
                                    f'\n**Wins**: {swwins}'
@@ -351,6 +361,9 @@ async def stats(ctx, username):
 
             sembed = discord.Embed(title='Hypixel Stats', color=0x00fffb)
             sembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
+            sembed.set_image(url = f"https://gen.plancke.io/exp/" + username + ".png")
+            sembed.set_footer(icon_url = 'https://i.imgur.com/TLnWvw2.png')
+            sembed.set_footer(text = 'Bot by: Olloz#0001')
             sembed.add_field(name=f'{username}\'s Stats:',
                             value=(f'\n**Level**: {networklevel}'
                                    f'\n**Karma**: {karma:,}'
@@ -364,7 +377,43 @@ async def stats(ctx, username):
             await ctx.send(embed=sembed)
             json_data.close()
 
+@client.command()
+async def skin(ctx, username):
 
+    json_data = open('private.json')
+    hypixeldata = json.load(json_data)
+
+    async with ctx.channel.typing():
+        img = f"https://mineskin.de/armor/body/{username}/150.png"
+        hypixelurl = f"https://api.hypixel.net/player?key={hypixeldata['hypixelKey']}&name={username}"
+
+    async with aiohttp.request("GET", hypixelurl) as response:
+        if response.status == 200:
+            datas = await response.json()
+
+            if datas["player"] is None:
+                await ctx.send(embed = invalidembed)
+                return
+
+            if len(username) < 3:
+                await ctx.send(embed = invalidembed)
+                return
+
+            json_data = open('private.json')
+            hypixeldata = json.load(json_data)
+
+            displayname = datas["player"]["displayname"]
+            embed = discord.Embed(title='Skin', color=0x00fffb)
+            embed.set_footer(text = "Bot by Olloz0001")
+            embed.set_author(name = "Player Skin")
+            embed.set_image(url = img)
+            embed.add_field(name = "\u200B",
+                            value = f"**To dowload this skin click [__HERE__](https://mineskin.de/download/{username})**"
+                            )
+
+            await ctx.send(embed = embed)
+            json_data.close()
+            return
 
 
 
