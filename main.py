@@ -18,4 +18,3 @@ client.load_extension('cogs.own')
 
 client.run(data["discordKey"])
 json_data.close()
-

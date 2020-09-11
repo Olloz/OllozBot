@@ -197,16 +197,21 @@ class hypixelapi(commands.Cog):
                 wins = data['player']['stats']['Duels']['wins']
                 losses = data['player']['stats']['Duels']['losses']
                 kills = data['player']['stats']['Duels']['kills']
+                games = data['player']['stats']['Duels']['games_played_duels']
+                duelsw_l = round(wins / losses, 2)
+                duelsk_d = round(kills / losses, 2)
 
-                dembed = discord.Embed(title='Duels Stats', color=0x00fffb)
+                dembed = discord.Embed(title=f'{username}\'s Duels Stats', color=0x00fffb)
                 dembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
                 dembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 dembed.set_footer(text='Bot by: Olloz#0001')
-                dembed.add_field(name=f'{username}\'s Duels Stats:',
-                                  value=(f'\n**Wins**: {wins}'
-                                         f'\n**Losses**: {losses}'
-                                         f'\n**Kills**: {kills}'),
-                                  inline=False)
+                dembed.add_field(name=f'__Overall Stats__',
+                                  value=(f'\n**Games Played**: {games:,}'
+                                         f'\n**Total Wins**: {wins:,}'
+                                         f'\n**Total Losses**: {losses:,}'                                   
+                                         f'\n**Total Kills**: {kills:,}'
+                                         f'\n**W/L**: {str (duelsw_l)}'
+                                         f'\n**K/D**: {str (duelsk_d)}'))
 
                 await ctx.send(embed=dembed)
                 json_data.close()

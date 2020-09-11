@@ -54,6 +54,7 @@ class misc(commands.Cog):
         helpembed.add_field(name="Skywars Stats", value="qt swstats <IGN>", inline=True)
         helpembed.add_field(name="Bedwars Stats", value="qt bwstats <IGN>", inline=True)
         helpembed.add_field(name="Hypixel Stats", value="qt stats <IGN>", inline=True)
+        helpembed.add_field(name="Duels Stats", value="qt duelstats <IGN>", inline=True)
         helpembed.add_field(name="Skin", value="qt skin <IGN>", inline=True)
         helpembed.set_footer(text='Message Olloz for more help!')
 
