@@ -217,6 +217,42 @@ class hypixelapi(commands.Cog):
                 json_data.close()
                 return
 
+    @commands.command()
+    async def bbstats(self, ctx, username):
+
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
+
+        url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
+
+        async with aiohttp.request("GET", url) as response:
+            if response.status == 200:
+
+                data = await response.json()
+                wins = data['player']['stats']['BuildBattle']['wins']
+                gamesplayed = data['player']['stats']['BuildBattle']['games_played']
+                losses = (gamesplayed - wins)
+                w_l = round(wins / losses, 2)
+                prowins = data['player']['stats']['BuildBattle']['wins_solo_pro']
+
+                bbembed = discord.Embed(title='Build Battle Stats', color=0x00fffb)
+                bbembed.set_thumbnail(url="https://mineskin.de/armor/bust/" + username + "/100.png")
+                bbembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
+                bbembed.set_footer(text='Bot by: Olloz#0001')
+                bbembed.add_field(name=f'{username}\'s Build Battle Stats',
+                                 value=(f'\n**Wins**: {wins:,}'
+                                        f'\n**Games Played**: {gamesplayed:,}'
+                                        f'\n**Losses**: {losses:,}'
+                                        f'\n**W/L**: {w_l:,}'
+                                        f'\n**Pro Mode Wins**: {prowins:,}'))
+
+
+                await ctx.send(embed=bbembed)
+                json_data.close()
+                return
+
+
+
 
 
 
