@@ -252,5 +252,37 @@ class hypixelapi(commands.Cog):
                 return
 
 
+    @commands.command()
+    async def watchdog(self, ctx):
+
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
+
+        url = f'https://api.hypixel.net/watchdogstats?key={hypixeldata["hypixelKey"]}'
+
+        async with aiohttp.request("GET", url) as response:
+            if response.status == 200:
+
+                data = await response.json()
+                wdtotal = data["watchdog_total"]
+                stotal = data["staff_total"]
+                total = (wdtotal + stotal)
+                lastminute = data["watchdog_lastMinute"]
+
+                embed = discord.Embed(title='Ban Stats', color=0x00fffb)
+                embed.set_thumbnail(url="https://hypixel.net/attachments/hypixel-png.689560/")
+                embed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
+                embed.set_footer(text='Bot by: Olloz#0001')
+                embed.add_field(name='Hypixel Ban Stats',
+                                value=(f'\n**Total Bans**: {total:,}'
+                                       f'\n**Watchdog Bans**: {wdtotal:,}'
+                                       f'\n**Staff Bans**: {stotal:,}'
+                                       f'\n**Last Minute**: {lastminute:,}'))
+
+                await ctx.send(embed=embed)
+                json_data.close()
+                return
+
+
 def setup(bot):
     bot.add_cog(hypixelapi(bot))
