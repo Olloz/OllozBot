@@ -252,22 +252,5 @@ class hypixelapi(commands.Cog):
                 return
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def setup(bot):
     bot.add_cog(hypixelapi(bot))
