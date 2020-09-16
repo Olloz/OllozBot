@@ -48,11 +48,11 @@ class hypixelapi(commands.Cog):
                 swembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 swembed.set_footer(text='Bot by: Olloz#0001')
                 swembed.add_field(name=f'{username}\'s Skywars Stats:',
-                                  value=(f'\n**Star**: {swstar}'
-                                         f'\n**Wins**: {swwins}'
-                                         f'\n**Losses**: {swlosses}'
-                                         f'\n**Kills**: {swkills}'
-                                         f'\n**Deaths**: {swdeaths}'),
+                                  value=(f'\n**Star**: {swstar:,}'
+                                         f'\n**Wins**: {swwins:,}'
+                                         f'\n**Losses**: {swlosses:,}'
+                                         f'\n**Kills**: {swkills:,}'
+                                         f'\n**Deaths**: {swdeaths:,}'),
                                   inline=False)
 
                 await ctx.send(embed=swembed)
@@ -85,13 +85,13 @@ class hypixelapi(commands.Cog):
                 bwembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 bwembed.set_footer(text='Bot by: Olloz#0001')
                 bwembed.add_field(name=f'{username}\'s Bedwars Stats:',
-                                  value=(f'\n**Star**: {star}'
-                                         f'\n**Wins**: {wins}'
-                                         f'\n**Losses**: {losses}'
-                                         f'\n**Kills**: {kills}'
-                                         f'\n**Deaths**: {deaths}'
-                                         f'\n**Final Kills**: {finals}'),
-                                  inline=False)
+                                  value=(f'\n**Star**: {star:,}'
+                                         f'\n**Wins**: {wins:,}'
+                                         f'\n**Losses**: {losses:,}'
+                                         f'\n**Kills**: {kills:,}'
+                                         f'\n**Deaths**: {deaths:,}'
+                                         f'\n**Final Kills**: {finals:,}'),
+                                  inline=True)
 
                 await ctx.send(embed=bwembed)
                 json_data.close()
@@ -111,6 +111,8 @@ class hypixelapi(commands.Cog):
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
 
+
+
                 data = await response.json()
                 exp = data["player"]["networkExp"]
                 networklevel = (math.sqrt((2 * exp) + 30625) / 50) - 2.5
@@ -123,6 +125,18 @@ class hypixelapi(commands.Cog):
                         if quest == "completions":
                             for completion in data["player"]["quests"][lst]["completions"]:
                                 totalquests += len(completion)
+                if "rank" in data["player"] and data["player"]["rank"] != "NORMAL":
+                    rank = data["player"]["rank"]
+                elif "newPackageRank" in data["player"]:
+                    rank = data["player"]["newPackageRank"]
+                elif "packageRank" in data["player"]:
+                    rank = data["player"]["packageRank"]
+                else:
+                    rank = "NON "
+                if rank == "MVP_PLUS":
+                    rank = "MVP+ "
+                if rank == "VIP_PLUS":
+                    rank = "VIP+ "
 
                 uuid = data['player']['uuid']
                 data2 = f'https://api.hypixel.net/friends?key={hypixeldata["hypixelKey"]}&uuid={uuid}'
@@ -138,11 +152,11 @@ class hypixelapi(commands.Cog):
                 sembed.set_image(url=f"https://gen.plancke.io/exp/" + username + ".png")
                 sembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 sembed.set_footer(text='Bot by: Olloz#0001')
-                sembed.add_field(name=f'{username}\'s Stats:',
-                                 value=(f'\n**Level**: {networklevel}'
+                sembed.add_field(name=f'{rank}{username}\'s Stats:',
+                                 value=(f'\n**Level**: {networklevel:,}'
                                         f'\n**Karma**: {karma:,}'
-                                        f'\n**Quests Completed**: {totalquests}'
-                                        f'\n**Friends**: {totalFriends}')
+                                        f'\n**Quests Completed**: {totalquests:,}'
+                                        f'\n**Friends**: {totalFriends:,}')
                                  .format(
                                      str(networklevel),
                                      str(totalquests),
@@ -153,6 +167,8 @@ class hypixelapi(commands.Cog):
 
     @commands.command()
     async def skin(self, ctx, username):
+
+
 
         json_data = open('private.json')
         hypixeldata = json.load(json_data)
@@ -270,7 +286,7 @@ class hypixelapi(commands.Cog):
                 lastminute = data["watchdog_lastMinute"]
 
                 embed = discord.Embed(title='Ban Stats', color=0x00fffb)
-                embed.set_thumbnail(url="https://hypixel.net/attachments/hypixel-png.689560/")
+                embed.set_thumbnail(url="https://i.imgur.com/TLnWvw2.png")
                 embed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 embed.set_footer(text='Bot by: Olloz#0001')
                 embed.add_field(name='Hypixel Ban Stats',
@@ -282,6 +298,31 @@ class hypixelapi(commands.Cog):
                 await ctx.send(embed=embed)
                 json_data.close()
                 return
+    @commands.command()
+    async def players(self, ctx, username):
+
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
+
+        url = f'https://api.hypixel.net/gameCounts?key={hypixeldata["hypixelKey"]}'
+
+        async with aiohttp.request("GET", url) as response:
+            if response.status == 200:
+                data = await response.json()
+                total =
+                mainlobby =
+                skyblock =
+                bw =
+                sw =
+                duels =
+                arcade =
+                bb =
+                pit =
+                housing =
+                limbo =
+
+
+
 
 
 def setup(bot):
