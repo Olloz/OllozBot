@@ -298,8 +298,10 @@ class hypixelapi(commands.Cog):
                 await ctx.send(embed=embed)
                 json_data.close()
                 return
+
+
     @commands.command()
-    async def players(self, ctx, username):
+    async def players(self, ctx):
 
         json_data = open('private.json')
         hypixeldata = json.load(json_data)
@@ -309,17 +311,40 @@ class hypixelapi(commands.Cog):
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
                 data = await response.json()
-                total =
-                mainlobby =
-                skyblock =
-                bw =
-                sw =
-                duels =
-                arcade =
-                bb =
-                pit =
-                housing =
-                limbo =
+                total = data["playerCount"]
+                mainlobby = data["games"]["MAIN_LOBBY"]["players"]
+                skyblock = data["games"]["SKYBLOCK"]["players"]
+                bw = data["games"]["BEDWARS"]["players"]
+                sw = data["games"]["SKYWARS"]["players"]
+                duels = data["games"]["DUELS"]["players"]
+                arcade = data["games"]["ARCADE"]["players"]
+                bb = data["games"]["BUILD_BATTLE"]["players"]
+                pit = data["games"]["PIT"]["players"]
+                housing = data["games"]["HOUSING"]["players"]
+                limbo = data["games"]["LIMBO"]["players"]
+                idle = data["games"]["IDLE"]["players"]
+
+                embed = discord.Embed(title='Player Counts', color=0x00fffb)
+                embed.set_thumbnail(url="https://i.imgur.com/TLnWvw2.png")
+                embed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
+                embed.set_footer(text='Bot by: Olloz#0001')
+                embed.add_field(name='**Hypixel Live PLayer Counts**:',
+                                value=(f'\n**Total Online**: {total:,}'
+                                       f'\n**Main Lobby**: {mainlobby:,}'
+                                       f'\n**Skyblock**: {skyblock:,}'
+                                       f'\n**Bedwars**: {bw:,}'
+                                       f'\n**Skywars**: {sw:,}'
+                                       f'\n**Duels**: {duels:,}'
+                                       f'\n**Arcade**: {arcade:,}'
+                                       f'\n**Build Battle**: {bb:,}'
+                                       f'\n**The Pit**: {pit:,}'
+                                       f'\n**Housing**: {housing:,}'
+                                       f'\n**Limbo**: {limbo:,}'
+                                       f'\n**Idle**: {idle:,}'))
+
+                await ctx.send(embed=embed)
+                json_data.close()
+                return
 
 
 
