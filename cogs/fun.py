@@ -23,6 +23,10 @@ class fun(commands.Cog):
         await ctx.send('**PANDA QT**')
 
     @commands.command()
+    async def banolloz(self, ctx):
+        await ctx.send('**I have banned Olloz.**')
+
+    @commands.command()
     async def xynit(self, ctx):
         await ctx.send('**XYNIT**')
 
@@ -110,6 +114,7 @@ class fun(commands.Cog):
             if response.status == 200:
                 data = await response.json()
                 await ctx.send(data['fact'])
+
 
 def setup(bot):
     bot.add_cog(fun(bot))
