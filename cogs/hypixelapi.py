@@ -3,6 +3,8 @@ import json
 import aiohttp
 from discord.ext import commands
 import discord
+import discord.utils
+from discord.utils import get
 
 class hypixelapi(commands.Cog):
     def __init__(self, bot):
@@ -345,6 +347,29 @@ class hypixelapi(commands.Cog):
                 await ctx.send(embed=embed)
                 json_data.close()
                 return
+
+    @commands.command()
+    async def verify(self, ctx, username):
+
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
+        url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
+        author = str(ctx.author)
+        async with aiohttp.request("GET", url) as response:
+            if response.status == 200:
+                data = await response.json()
+
+                linked_discord = data["player"]["socialMedia"]["links"]["DISCORD"]
+
+                if author == linked_discord:
+                    role = discord.Member.guild.roles, name = "Verified"
+                    await discord.Member.add_role(role=role)
+                    print("success")
+                    await ctx.send("gg verified")
+
+            print(author)
+            print(linked_discord)
+
 
 
 

@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-
+import aiohttp
 class admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -30,6 +30,8 @@ class admin(commands.Cog):
                 await ctx.guild.unban(user)
                 await ctx.send(f'Unbanned {user.mention}')
                 return
+
+
 
 def setup(bot):
     bot.add_cog(admin(bot))

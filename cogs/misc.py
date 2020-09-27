@@ -90,5 +90,9 @@ class misc(commands.Cog):
         """Bot Invite"""
         await ctx.send("Add me with this link {}".format(discord.utils.oauth_url(self.bot.user.id)))
 
+    @commands.command()
+    async def botservers(self, ctx):
+        await ctx.send("I'm in " + str(len(ctx.bot.guilds)) + " servers!")
+
 def setup(bot):
     bot.add_cog(misc(bot))
