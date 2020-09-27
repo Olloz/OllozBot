@@ -1,10 +1,10 @@
 import math
 import json
 import aiohttp
-from discord.ext import commands
 import discord
 import discord.utils
 from discord.utils import get
+from discord.ext import commands
 
 class hypixelapi(commands.Cog):
     def __init__(self, bot):
@@ -354,21 +354,23 @@ class hypixelapi(commands.Cog):
         json_data = open('private.json')
         hypixeldata = json.load(json_data)
         url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&name={username}'
-        author = str(ctx.author)
+        author = ctx.message.author
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
                 data = await response.json()
 
                 linked_discord = data["player"]["socialMedia"]["links"]["DISCORD"]
 
-                if author == linked_discord:
-                    role = discord.Member.guild.roles, name = "Verified"
-                    await discord.Member.add_role(role=role)
+                if str(author) == linked_discord:
+                    role = get(ctx.guild.roles, name="test")
+                    await author.add_roles(author, role)
+
+                    await ctx.send("Role added")
                     print("success")
                     await ctx.send("gg verified")
 
-            print(author)
-            print(linked_discord)
+                    print(author)
+                    print(linked_discord)
 
 
 
