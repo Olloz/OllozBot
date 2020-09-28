@@ -6,6 +6,7 @@ import discord.utils
 from discord.utils import get
 from discord.ext import commands
 
+
 class hypixelapi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -113,8 +114,6 @@ class hypixelapi(commands.Cog):
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
 
-
-
                 data = await response.json()
                 exp = data["player"]["networkExp"]
                 networklevel = (math.sqrt((2 * exp) + 30625) / 50) - 2.5
@@ -170,8 +169,6 @@ class hypixelapi(commands.Cog):
     @commands.command()
     async def skin(self, ctx, username):
 
-
-
         json_data = open('private.json')
         hypixeldata = json.load(json_data)
 
@@ -183,8 +180,6 @@ class hypixelapi(commands.Cog):
             if response.status == 200:
                 datas = await response.json()
 
-
-
                 json_data = open('private.json')
                 hypixeldata = json.load(json_data)
 
@@ -194,8 +189,8 @@ class hypixelapi(commands.Cog):
                 skembed.set_author(name="Player Skin")
                 skembed.set_image(url=img)
                 skembed.add_field(name="\u200B",
-                                value=f"**To dowload this skin click [__HERE__](https://mineskin.de/download/{username})**"
-                                )
+                                  value=f"**To dowload this skin click [__HERE__](https://mineskin.de/download/{username})**"
+                                  )
 
                 await ctx.send(embed=skembed)
                 json_data.close()
@@ -210,7 +205,6 @@ class hypixelapi(commands.Cog):
 
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
-
                 data = await response.json()
                 wins = data['player']['stats']['Duels']['wins']
                 losses = data['player']['stats']['Duels']['losses']
@@ -224,12 +218,12 @@ class hypixelapi(commands.Cog):
                 dembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 dembed.set_footer(text='Bot by: Olloz#0001')
                 dembed.add_field(name=f'__Overall Stats__',
-                                  value=(f'\n**Games Played**: {games:,}'
-                                         f'\n**Total Wins**: {wins:,}'
-                                         f'\n**Total Losses**: {losses:,}'                                   
-                                         f'\n**Total Kills**: {kills:,}'
-                                         f'\n**W/L**: {str (duelsw_l)}'
-                                         f'\n**K/D**: {str (duelsk_d)}'))
+                                 value=(f'\n**Games Played**: {games:,}'
+                                        f'\n**Total Wins**: {wins:,}'
+                                        f'\n**Total Losses**: {losses:,}'
+                                        f'\n**Total Kills**: {kills:,}'
+                                        f'\n**W/L**: {str(duelsw_l)}'
+                                        f'\n**K/D**: {str(duelsk_d)}'))
 
                 await ctx.send(embed=dembed)
                 json_data.close()
@@ -245,7 +239,6 @@ class hypixelapi(commands.Cog):
 
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
-
                 data = await response.json()
                 wins = data['player']['stats']['BuildBattle']['wins']
                 gamesplayed = data['player']['stats']['BuildBattle']['games_played']
@@ -258,17 +251,15 @@ class hypixelapi(commands.Cog):
                 bbembed.set_footer(icon_url='https://i.imgur.com/TLnWvw2.png')
                 bbembed.set_footer(text='Bot by: Olloz#0001')
                 bbembed.add_field(name=f'{username}\'s Build Battle Stats',
-                                 value=(f'\n**Wins**: {wins:,}'
-                                        f'\n**Games Played**: {gamesplayed:,}'
-                                        f'\n**Losses**: {losses:,}'
-                                        f'\n**W/L**: {w_l:,}'
-                                        f'\n**Pro Mode Wins**: {prowins:,}'))
-
+                                  value=(f'\n**Wins**: {wins:,}'
+                                         f'\n**Games Played**: {gamesplayed:,}'
+                                         f'\n**Losses**: {losses:,}'
+                                         f'\n**W/L**: {w_l:,}'
+                                         f'\n**Pro Mode Wins**: {prowins:,}'))
 
                 await ctx.send(embed=bbembed)
                 json_data.close()
                 return
-
 
     @commands.command()
     async def watchdog(self, ctx):
@@ -280,7 +271,6 @@ class hypixelapi(commands.Cog):
 
         async with aiohttp.request("GET", url) as response:
             if response.status == 200:
-
                 data = await response.json()
                 wdtotal = data["watchdog_total"]
                 stotal = data["staff_total"]
@@ -300,7 +290,6 @@ class hypixelapi(commands.Cog):
                 await ctx.send(embed=embed)
                 json_data.close()
                 return
-
 
     @commands.command()
     async def players(self, ctx):
@@ -360,19 +349,29 @@ class hypixelapi(commands.Cog):
                 data = await response.json()
 
                 linked_discord = data["player"]["socialMedia"]["links"]["DISCORD"]
+                uuid = data["player"]["uuid"]
+                json_data = open('private.json')
+                hypixeldata = json.load(json_data)
+                url = f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=Betrayed'
+                async with aiohttp.request("GET", url) as response:
+                    if response.status == 200:
+                        data2 = await response.json()
+                        guildMembers = [member["uuid"] for member in data2["guild"]["members"]]
 
-                if str(author) == linked_discord:
-                    role = get(ctx.guild.roles, name="Verified")
-                    await author.add_roles(role)
-                    await ctx.send("Successfully Verified")
-
-                    print("Success")
-                    print(author)
-                    print(linked_discord)
+                        if str(author) == linked_discord:
+                            if uuid == guildMembers:
+                                role = get(ctx.guild.roles, name="Guild Member")
+                                await author.add_roles(role)
 
 
+                        elif str(author) == linked_discord:
+                            role = get(ctx.guild.roles, name="Verified")
+                            await author.add_roles(role)
+                            await ctx.send("Successfully Verified")
 
-
+                            print("Success")
+                            print(author)
+                            print(linked_discord)
 
 
 def setup(bot):
