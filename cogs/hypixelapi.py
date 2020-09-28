@@ -364,10 +364,9 @@ class hypixelapi(commands.Cog):
                 if str(author) == linked_discord:
                     role = get(ctx.guild.roles, name="Verified")
                     await author.add_roles(role)
+                    await ctx.send("Successfully Verified")
 
-                    await ctx.send("Successfully Verified!")
                     print("Success")
-
                     print(author)
                     print(linked_discord)
 
