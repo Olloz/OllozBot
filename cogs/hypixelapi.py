@@ -359,19 +359,37 @@ class hypixelapi(commands.Cog):
                         guildMembers = [member["uuid"] for member in data2["guild"]["members"]]
 
                         if str(author) == linked_discord:
-                            if uuid == guildMembers:
-                                role = get(ctx.guild.roles, name="Guild Member")
-                                await author.add_roles(role)
-
-
-                        elif str(author) == linked_discord:
                             role = get(ctx.guild.roles, name="Verified")
                             await author.add_roles(role)
-                            await ctx.send("Successfully Verified")
 
-                            print("Success")
-                            print(author)
-                            print(linked_discord)
+                        if str(author) == linked_discord:
+                            if uuid in guildMembers:
+                                role = get(ctx.guild.roles, name="Guild Member")
+                                await author.add_roles(role)
+                                await ctx.send("IGN Verified as Guild Member")
+                            else:
+                                url = f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=TheNinjaWarriors'
+                                async with aiohttp.request("GET", url) as response:
+                                    if response.status == 200:
+                                        data2 = await response.json()
+                                        ally1Members = [member["uuid"] for member in data2["guild"]["members"]]
+                                        if str(author) == linked_discord:
+                                            if uuid in ally1Members:
+                                                role = get(ctx.guild.roles, name="Alliance Member")
+                                                await author.add_roles(role)
+                                                await ctx.send("IGN Verified as Alliance Member")
+                                            else:
+                                                url = f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=CaveGame'
+                                                async with aiohttp.request("GET", url) as response:
+                                                    if response.status == 200:
+                                                        data2 = await response.json()
+                                                        ally2Members = [member["uuid"] for member in
+                                                                        data2["guild"]["members"]]
+                                                        if str(author) == linked_discord:
+                                                            if uuid in ally2Members:
+                                                                role = get(ctx.guild.roles, name="Alliance Member")
+                                                                await author.add_roles(role)
+                                                                await ctx.send("IGN Verified as Alliance Member")
 
 
 def setup(bot):
