@@ -379,7 +379,7 @@ class hypixelapi(commands.Cog):
                                                 await author.add_roles(role)
                                                 await ctx.send("IGN Verified as Alliance Member")
                                             else:
-                                                url = f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=CaveGame'
+                                                url = f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=Cave Game'
                                                 async with aiohttp.request("GET", url) as response:
                                                     if response.status == 200:
                                                         data2 = await response.json()
@@ -390,6 +390,20 @@ class hypixelapi(commands.Cog):
                                                                 role = get(ctx.guild.roles, name="Alliance Member")
                                                                 await author.add_roles(role)
                                                                 await ctx.send("IGN Verified as Alliance Member")
+                                                            else:
+                                                                url = f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=WeClick'
+                                                                async with aiohttp.request("GET", url) as response:
+                                                                    if response.status == 200:
+                                                                        data2 = await response.json()
+                                                                        ally3Members = [member["uuid"] for member in
+                                                                                        data2["guild"]["members"]]
+                                                                        if str(author) == linked_discord:
+                                                                            if uuid in ally3Members:
+                                                                                role = get(ctx.guild.roles,
+                                                                                           name="Alliance Member")
+                                                                                await author.add_roles(role)
+                                                                                await ctx.send(
+                                                                                    "IGN Verified as Alliance Member")
 
 
 def setup(bot):
