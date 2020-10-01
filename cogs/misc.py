@@ -40,7 +40,6 @@ class misc(commands.Cog):
         helpembed.add_field(name="Help", value="qt help", inline=True)
         helpembed.add_field(name="Bot's Ping", value="qt ping / qt pong", inline=True)
         helpembed.add_field(name="User Info", value="qt whois [user]", inline=True)
-        helpembed.add_field(name="Am I qt?", value="*Being Developed*", inline=True)
         helpembed.add_field(name="8 Ball", value="qt 8ball [question]", inline=True)
         helpembed.add_field(name="Kick User", value="qt kick", inline=True)
         helpembed.add_field(name="Ban User", value="qt ban", inline=True)
@@ -56,6 +55,9 @@ class misc(commands.Cog):
         helpembed.add_field(name="Hypixel Stats", value="qt stats <IGN>", inline=True)
         helpembed.add_field(name="Duels Stats", value="qt duelstats <IGN>", inline=True)
         helpembed.add_field(name="Skin", value="qt skin <IGN>", inline=True)
+        helpembed.add_field(name="Online Players", value="qt players", inline=True)
+        helpembed.add_field(name="PANDA", value="qt panda/pqndar", inline=True)
+        helpembed.add_field(name="Olloz", value="qt olloz/Olloz", inline=True)
         helpembed.set_footer(text='Message Olloz for more help!')
 
         await ctx.send(embed=helpembed)
