@@ -404,13 +404,18 @@ class hypixelapi(commands.Cog):
 
     @commands.command()
     async def inactive(self, ctx):
+        await ctx.send("Hey Guys!\nHere is the inactive players list for this week:")
         import time
         import requests
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
         REQUIREMENT = 30000
+
         currentTime = int(time.time() * 1000)
         people = []
-        data = requests.get(
-            "https://api.hypixel.net/guild?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&name=Betrayed").json()
+
+        data = requests.get(f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=Betrayed').json()
+
         def getTotal(arr, length):
             total = 0
             for i in arr:
@@ -418,20 +423,29 @@ class hypixelapi(commands.Cog):
             if len(arr) < length and total < REQUIREMENT:
                 total = -1
             return total
+
         guildMembers = data["guild"]["members"]
         for guildMember in guildMembers:
             player = guildMember["uuid"]
             totalExp = getTotal(guildMember["expHistory"].values(), 7)
             if totalExp < REQUIREMENT and currentTime - guildMember["joined"] > 691200000:
                 data2 = requests.get(
-                    "https://api.hypixel.net/player?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&uuid=" + player).json()
+                    f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&uuid=' + player).json()
                 playerIGN = data2["player"]["displayname"]
+                try:
+                    disc = data2["player"]["socialMedia"]["links"]["DISCORD"]
+                except KeyError:
+                    disc = ""
+                if disc != "":
+                    print("@" + disc)
                 temp = [playerIGN, totalExp]
                 people.append(temp)
+                # print (playerIGN + " " + str(totalExp))
                 people.sort(key=lambda x: x[1])
-        people = str(people)
-        people.join(people)
-        await ctx.send(people)
+
+        for i in people:
+            print(i)
+
 
 
 

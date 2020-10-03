@@ -1,7 +1,6 @@
 import json
 from discord.ext import commands
 from discord.ext.commands import Bot
-
 json_data = open('private.json')
 data = json.load(json_data)
 
