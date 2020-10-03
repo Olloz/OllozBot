@@ -18,9 +18,23 @@ class fun(commands.Cog):
     async def randomnumber(self, ctx):
         await ctx.send(random.randint(1, 101))
 
-    @commands.command()
+    @commands.command(aliases=['pqndar'])
     async def panda(self, ctx):
-        await ctx.send('**PANDA QT**')
+        responses = [f"{'http://gph.is/1iVh7gj'}",
+                     f"{'http://gph.is/1IMeKJn'}",
+                     f"{'https://gph.is/17gwlpf'}",
+                     f"{'https://gph.is/18Pbj5j'}",
+                     f"{'https://gph.is/1EeYSJc'}",
+                     f"{'https://gph.is/15tfejw'}",
+                     f"{'http://gph.is/29csp2t'}",
+                     f"{'https://gph.is/1sFtYMl'}",
+                     f"{'http://gph.is/2jpIFTU'}",
+                     f"{'https://gph.is/2oXUCzD'}",
+                     f"{'https://gph.is/2lG8RpR'}",
+                     f"{'https://gph.is/1EeXR3X'}",
+                     f"{'https://gph.is/XIM3HS'}"]
+
+        await ctx.send(random.choice(responses))
 
     @commands.command()
     async def banolloz(self, ctx):
@@ -29,6 +43,10 @@ class fun(commands.Cog):
     @commands.command()
     async def xynit(self, ctx):
         await ctx.send('**XYNIT**')
+
+    @commands.command(aliases=['Olloz'])
+    async def olloz(self, ctx):
+        await ctx.send('**THE MAKER OMG OLLOZ ILY <3 KISS ME OLLOZ QTTTTTTTTTTTTTTT**')
 
     @commands.command()
     async def gummy(self, ctx):

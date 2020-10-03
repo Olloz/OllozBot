@@ -173,7 +173,6 @@ class hypixelapi(commands.Cog):
         hypixeldata = json.load(json_data)
 
         async with ctx.channel.typing():
-            img = f"https://mineskin.de/armor/body/{username}/150.png"
             hypixelurl = f"https://api.hypixel.net/player?key={hypixeldata['hypixelKey']}&name={username}"
 
         async with aiohttp.request("GET", hypixelurl) as response:
@@ -181,20 +180,18 @@ class hypixelapi(commands.Cog):
                 datas = await response.json()
 
                 json_data = open('private.json')
-                hypixeldata = json.load(json_data)
-
-                displayname = datas["player"]["displayname"]
-                skembed = discord.Embed(title='Skin', color=0x00fffb)
+                uuid = datas['player']['uuid']
+                img2 = f'https://crafatar.com/renders/body/{uuid}'
+                img = f'https://crafatar.com/renders/head/{uuid}'
+                skembed = discord.Embed(title='Skin & Head', color=0x00fffb)
+                skembed.set_thumbnail(url=img)
                 skembed.set_footer(text="Bot by Olloz0001")
-                skembed.set_author(name="Player Skin")
-                skembed.set_image(url=img)
-                skembed.add_field(name="\u200B",
-                                  value=f"**To dowload this skin click [__HERE__](https://mineskin.de/download/{username})**"
-                                  )
-
+                skembed.set_image(url=img2)
                 await ctx.send(embed=skembed)
                 json_data.close()
                 return
+
+
 
     @commands.command()
     async def duelstats(self, ctx, username):
@@ -435,6 +432,8 @@ class hypixelapi(commands.Cog):
         people = str(people)
         people.join(people)
         await ctx.send(people)
+
+
 
 def setup(bot):
     bot.add_cog(hypixelapi(bot))
