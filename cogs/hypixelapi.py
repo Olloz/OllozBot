@@ -405,6 +405,36 @@ class hypixelapi(commands.Cog):
                                                                                 await ctx.send(
                                                                                     "IGN Verified as Alliance Member")
 
+    @commands.command()
+    async def inactive(self, ctx):
+        import time
+        import requests
+        REQUIREMENT = 30000
+        currentTime = int(time.time() * 1000)
+        people = []
+        data = requests.get(
+            "https://api.hypixel.net/guild?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&name=Betrayed").json()
+        def getTotal(arr, length):
+            total = 0
+            for i in arr:
+                total += i
+            if len(arr) < length and total < REQUIREMENT:
+                total = -1
+            return total
+        guildMembers = data["guild"]["members"]
+        for guildMember in guildMembers:
+            player = guildMember["uuid"]
+            totalExp = getTotal(guildMember["expHistory"].values(), 7)
+            if totalExp < REQUIREMENT and currentTime - guildMember["joined"] > 691200000:
+                data2 = requests.get(
+                    "https://api.hypixel.net/player?key=631e3e7d-d02d-4e3e-94f0-be3a211beced&uuid=" + player).json()
+                playerIGN = data2["player"]["displayname"]
+                temp = [playerIGN, totalExp]
+                people.append(temp)
+                people.sort(key=lambda x: x[1])
+        people = str(people)
+        people.join(people)
+        await ctx.send(people)
 
 def setup(bot):
     bot.add_cog(hypixelapi(bot))
