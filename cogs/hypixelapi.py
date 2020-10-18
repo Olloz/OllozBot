@@ -457,31 +457,11 @@ class hypixelapi(commands.Cog):
             async with aiohttp.request("GET", url) as response:
                 data2 = await response.json()
             displayname = data2['player']['displayname']
-            some_var = data2['player'].get('socialMedia')
-
+            some_var = data2['player']['socialMedia']['links'].get('DISCORD')
             if some_var:
                 print(f"{displayname}'s Linked Discord - {some_var}")
             else:
-                print("no")
-                print(displayname)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                print(f"{displayname}'s Linked Discord - None")
 
 
 def setup(bot):
