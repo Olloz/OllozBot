@@ -440,11 +440,46 @@ class hypixelapi(commands.Cog):
                     print("@" + disc)
                 temp = [playerIGN, totalExp]
                 people.append(temp)
-                # print (playerIGN + " " + str(totalExp))
                 people.sort(key=lambda x: x[1])
 
         for i in people:
             print(i)
+
+    @commands.command()
+    async def verified(self, ctx):
+        import requests
+        json_data = open('private.json')
+        hypixeldata = json.load(json_data)
+        data = requests.get(f'https://api.hypixel.net/guild?key={hypixeldata["hypixelKey"]}&name=Betrayed').json()
+        guildMembers = [member["uuid"] for member in data["guild"]["members"]]
+        for i in guildMembers:
+            url = f'https://api.hypixel.net/player?key={hypixeldata["hypixelKey"]}&uuid={i}'
+            async with aiohttp.request("GET", url) as response:
+                data2 = await response.json()
+            displayname = data2['player']['displayname']
+            some_var = data2['player'].get('socialMedia')
+
+            if some_var:
+                print(f"{displayname}'s Linked Discord - {some_var}")
+            else:
+                print("no")
+                print(displayname)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
