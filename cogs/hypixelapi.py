@@ -464,5 +464,16 @@ class hypixelapi(commands.Cog):
                 print(f"{displayname}'s Linked Discord - None")
 
 
+
+    @commands.command()
+    async def roles(self, ctx):
+        players = ctx.guild.members
+        for player in players:
+            role = ctx.guild.get_role(771026887290912790)
+            await player.add_roles(role)
+            await ctx.send(
+                "Given the roles")
+
+
 def setup(bot):
     bot.add_cog(hypixelapi(bot))
